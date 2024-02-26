@@ -17,24 +17,20 @@ def hello_world():
 def start_server():
     pid = subprocess.Popen(["/usr/bin/env", "python2", "phoenix-daemon.py", "run"]).pid
     print("Server started with PID", pid)
-    with open("server.pid", "w") as f:
-        f.write(str(pid))
 
 def stop_server():
-    try:
-        with open("server.pid", "r") as f:
-            pid = int(f.read())
-        os.kill(pid, signal.SIGTERM)
+    pid = subprocess.check_output(["pgrep", "-f", "python2 phoenix-daemon.py run"])
+    if pid:
+        os.kill(int(pid), signal.SIGTERM)
         print("Server stopped")
-    except IOError:
+    else:
         print("Server is not running")
 
 def status_server():
-    try:
-        with open("server.pid", "r") as f:
-            pid = int(f.read())
+    pid = subprocess.check_output(["pgrep", "-f", "python2 phoenix-daemon.py run"])
+    if pid:
         print("Server is running with PID", pid)
-    except IOError:
+    else:
         print("Server is not running")
 
 def run_server():
