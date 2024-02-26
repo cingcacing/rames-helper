@@ -1,5 +1,5 @@
-#!/usr/bin/env python2.7
-# app.py
+#!/usr/bin/env python2
+
 import argparse
 from flask import Flask
 import os
@@ -14,7 +14,7 @@ def hello_world():
     return 'rames.id phoenix daemon'
 
 def start_server():
-    pid = subprocess.Popen(["/usr/bin/env", "python2.7", "app.py", "run"]).pid
+    pid = subprocess.Popen(["/usr/bin/env", "python2.7", "phoenix-daemon.py", "run"]).pid
     print("Server started with PID", pid)
     with open("server.pid", "w") as f:
         f.write(str(pid))
