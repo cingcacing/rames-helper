@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-
+# phoenix-daemon.py
 import argparse
 from flask import Flask
 import os
@@ -8,13 +8,14 @@ import subprocess
 import sys
 
 app = Flask(__name__)
+app.env = 'production'
 
 @app.route('/')
 def hello_world():
     return 'rames.id phoenix daemon'
 
 def start_server():
-    pid = subprocess.Popen(["/usr/bin/env", "python2.7", "phoenix-daemon.py", "run"]).pid
+    pid = subprocess.Popen(["/usr/bin/env", "python2", "phoenix-daemon.py", "run"]).pid
     print("Server started with PID", pid)
     with open("server.pid", "w") as f:
         f.write(str(pid))
@@ -25,7 +26,7 @@ def stop_server():
             pid = int(f.read())
         os.kill(pid, signal.SIGTERM)
         print("Server stopped")
-    except FileNotFoundError:
+    except IOError:
         print("Server is not running")
 
 def status_server():
@@ -33,7 +34,7 @@ def status_server():
         with open("server.pid", "r") as f:
             pid = int(f.read())
         print("Server is running with PID", pid)
-    except FileNotFoundError:
+    except IOError:
         print("Server is not running")
 
 def run_server():
