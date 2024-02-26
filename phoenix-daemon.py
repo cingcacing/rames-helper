@@ -2,27 +2,22 @@
 # app.py
 import argparse
 from flask import Flask
-from multiprocessing import Process
 import os
 import signal
+import subprocess
 import sys
-import time
 
 app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'RAMES.ID PHOENIX'
-
-def run_server():
-    app.run(host='0.0.0.0', port=56782)
+    return 'rames.id phoenix daemon'
 
 def start_server():
-    p = Process(target=run_server)
-    p.start()
-    print("Server started with PID", p.pid)
+    pid = subprocess.Popen(["/usr/bin/env", "python2.7", "app.py", "run"]).pid
+    print("Server started with PID", pid)
     with open("server.pid", "w") as f:
-        f.write(str(p.pid))
+        f.write(str(pid))
 
 def stop_server():
     try:
@@ -41,9 +36,12 @@ def status_server():
     except FileNotFoundError:
         print("Server is not running")
 
+def run_server():
+    app.run(host='0.0.0.0', port=56782)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Manage the Flask server.')
-    parser.add_argument('command', choices=['start', 'stop', 'status'])
+    parser.add_argument('command', choices=['start', 'stop', 'status', 'run'])
     args = parser.parse_args()
 
     if args.command == 'start':
@@ -52,3 +50,5 @@ if __name__ == '__main__':
         stop_server()
     elif args.command == 'status':
         status_server()
+    elif args.command == 'run':
+        run_server()
