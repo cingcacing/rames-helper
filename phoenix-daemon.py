@@ -17,6 +17,8 @@ def hello_world():
 def start_server():
     pid = subprocess.Popen(["/usr/bin/env", "python2", "phoenix-daemon.py", "run"]).pid
     print("Server started with PID", pid)
+    with open('/opt/phoenix/phoenix.pid', 'w') as f:
+        f.write(str(pid))
 
 def stop_server():
     process = subprocess.Popen(["pgrep", "-f", "python2 phoenix-daemon.py run"], stdout=subprocess.PIPE)
@@ -24,6 +26,8 @@ def stop_server():
     if pid:
         os.kill(int(pid), signal.SIGTERM)
         print("Server stopped")
+        if os.path.exists('/opt/phoenix/phoenix.pid'):
+            os.remove('/opt/phoenix/phoenix.pid')
     else:
         print("Server is not running")
 
