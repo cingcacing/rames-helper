@@ -15,7 +15,7 @@ def hello_world():
     return 'rames.id phoenix daemon'
 
 def start_server():
-    pid = subprocess.Popen(["/usr/bin/env", "python2", "phoenix-daemon.py", "run"]).pid
+    pid = subprocess.Popen(["/usr/bin/env", "python2", "/opt/phoenix/phoenix-daemon.py", "run", ">/opt/phoenix/phoenix.log"]).pid
     print("Server started with PID", pid)
     with open('/opt/phoenix/phoenix.pid', 'w') as f:
         f.write(str(pid))
