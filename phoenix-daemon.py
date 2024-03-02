@@ -21,7 +21,7 @@ def start_server():
         f.write(str(pid))
 
 def stop_server():
-    process = subprocess.Popen(["pgrep", "-f", "python2 phoenix-daemon.py run"], stdout=subprocess.PIPE)
+    process = subprocess.Popen(["pgrep", "-f", "phoenix-daemon.py"], stdout=subprocess.PIPE)
     pid, _ = process.communicate()
     pids = pid.split()
     for p in pids:
@@ -32,7 +32,7 @@ def stop_server():
             f.write('')
 
 def status_server():
-    process = subprocess.Popen(["pgrep", "-f", "python2 phoenix-daemon.py run"], stdout=subprocess.PIPE)
+    process = subprocess.Popen(["pgrep", "-f", "phoenix-daemon.py"], stdout=subprocess.PIPE)
     pid, _ = process.communicate()
     if pid:
         print("Server is running with PID", pid)
