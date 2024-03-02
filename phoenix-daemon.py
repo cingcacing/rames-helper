@@ -26,10 +26,11 @@ def stop_server():
     if pid:
         os.kill(int(pid), signal.SIGTERM)
         print("Server stopped")
-        if os.path.exists('/opt/phoenix/phoenix.pid'):
-            os.remove('/opt/phoenix/phoenix.pid')
     else:
         print("Server is not running")
+    if os.path.exists('/opt/phoenix/phoenix.pid'):
+        with open('/opt/phoenix/phoenix.pid', 'w') as f:
+            f.write('')
 
 def status_server():
     process = subprocess.Popen(["pgrep", "-f", "python2 phoenix-daemon.py run"], stdout=subprocess.PIPE)
