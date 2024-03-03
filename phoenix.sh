@@ -19,15 +19,15 @@ fi
 case "$1" in
     start)
         echo "Starting phoenix service..."
-        python3 $PHOENIX_SERVICE start
+        python2 $PHOENIX_SERVICE start
         ;;
     stop)
         echo "Stopping phoenix service..."
-        python3 $PHOENIX_SERVICE stop
+        python2 $PHOENIX_SERVICE stop
         ;;
     status)
         echo "Checking status of phoenix service..."
-        python3 $PHOENIX_SERVICE status
+        python2 $PHOENIX_SERVICE status
         ;;
     *)
         echo "Invalid argument. Usage: $0 {start|stop|status}"
