@@ -3,10 +3,14 @@
 PID_FILE="/opt/phoenix/phoenix.pid"
 SERVER_PORT=56782
 
+cd /opt/phoenix
+echo "phoenix daemon" > /opt/phoenix/index.html
+
 start_server() {
     if [ -f $PID_FILE ]; then
         echo "Server is already running"
     else
+
         nohup python2 -m SimpleHTTPServer $SERVER_PORT > /dev/null 2>&1 &
         echo $! > $PID_FILE
         echo "Server started"
