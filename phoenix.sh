@@ -20,14 +20,35 @@ case "$1" in
     start)
         echo "Starting phoenix service..."
         python2 $PHOENIX_SERVICE start
+        return_code=$?
+        if [ $return_code -eq 0 ]; then
+            echo "Phoenix service started successfully."
+        else
+            echo "Failed to start phoenix service."
+        fi
+        exit $return_code
         ;;
     stop)
         echo "Stopping phoenix service..."
         python2 $PHOENIX_SERVICE stop
+        return_code=$?
+        if [ $return_code -eq 0 ]; then
+            echo "Phoenix service stopped successfully."
+        else
+            echo "Failed to stop phoenix service."
+        fi
+        exit $return_code
         ;;
     status)
         echo "Checking status of phoenix service..."
         python2 $PHOENIX_SERVICE status
+        return_code=$?
+        if [ $return_code -eq 0 ]; then
+            echo "Phoenix service is running."
+        else
+            echo "Phoenix service is not running."
+        fi
+        exit $return_code
         ;;
     *)
         echo "Invalid argument. Usage: $0 {start|stop|status}"
