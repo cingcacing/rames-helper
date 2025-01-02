@@ -1,0 +1,271 @@
+The document outlines a comprehensive presentation on "Big Data" and the "RAMES" (Rapid Analytic Management & Enterprise System) framework, detailing its infrastructure, solutions, and advantages. Below is a detailed summary of each slide from the presentation:
+Slide 1: Introduction to Big Data and RAMES
+
+    Big Data: The presentation begins with an introduction to the concept of Big Data, emphasizing its growing significance in various industries.
+    Brochure: A mention of a brochure, likely providing additional information about the topic.
+    Company Information: The slide includes the website (WWW.ALUTECHNO.IO) and the name of the company (PT. ADAB LEBIH UTAMA) associated with the presentation.
+    RAMES: Introduction to the RAMES framework, which stands for Rapid Analytic Management & Enterprise System.
+
+Slide 2: Automation of Big Data Value Chain
+
+    This slide emphasizes the importance of automating processes within the Big Data lifecycle. Automation is crucial for enhancing efficiency and ensuring that data is processed and analyzed effectively.
+
+Slide 3: Big Data Infrastructure Reference Architecture
+
+    The slide discusses the foundational architecture required for Big Data systems. It likely covers the essential components and structure needed to support Big Data initiatives.
+
+Slide 4: RAMES Infrastructure Reference Architecture
+
+    This slide presents the specific infrastructure architecture tailored for the RAMES framework, detailing how it supports Big Data operations.
+
+Slide 5: RAMES Solution Stacks
+
+    The slide outlines the various components and technologies that comprise the RAMES framework, showcasing the integrated solutions it offers for managing Big Data.
+
+Slide 6: RAMES Big Data Stacks
+
+    Further elaboration on the specific stacks within the RAMES framework, likely detailing the technologies and tools used for data management and analytics.
+
+Slide 7: Platform Advantages
+
+    This slide highlights the key benefits of the RAMES platform, including:
+        Data Governance: Ensuring proper management and oversight of data sources.
+        Increasing Data Value: Strategies to enhance the value derived from data.
+        Machine Learning: Capabilities that allow for advanced data analysis and predictive modeling.
+
+Slide 8: Data Governance
+
+    Focuses on the ability to manage diverse data sources and types effectively. It emphasizes that proper governance leads to outputs that meet specific organizational objectives.
+
+Slide 9: Increasing Value of Data
+
+    Discusses the intrinsic value of data and the risks of mismanagement, which can lead to loss or misinterpretation. It explains how RAMES integrates Data Science, Engineering, and Analysis to enhance data value and provide actionable insights.
+
+Slide 10: Machine Learning
+
+    Outlines the different types of machine learning:
+        Descriptive: Analyzing past data to understand trends.
+        Predictive: Using historical data to forecast future outcomes.
+        Prescriptive: Recommending actions based on data analysis.
+    Highlights how RAMES utilizes these machine learning methods to generate analytical outputs.
+
+Slide 11: Use Case
+
+    Introduces the concept of practical applications of the RAMES framework in real-world scenarios.
+
+Slide 12: Sentiment Analysis
+
+    Provides an example of a specific use case, sentiment analysis, which involves analyzing text data to gauge public opinion or sentiment.
+
+Slide 13: Descriptive Analysis (1)
+
+    Discusses the first aspect of descriptive analysis, likely providing examples or methodologies used in this type of analysis.
+
+Slide 14: Descriptive Analysis (2)
+
+    Continues the discussion on descriptive analysis, offering further insights or case studies.
+
+Slide 15: Predictive Analysis
+
+    Focuses on predictive analysis, detailing how historical data is used to make forecasts about future events or trends.
+
+Slide 16: Prescriptive Analysis
+
+    Discusses prescriptive analysis, which involves recommending actions based on data insights and predictive modeling.
+
+Slide 17: Implementation
+
+    Describes the strategies for implementing the RAMES framework, including both basic and project-based approaches.
+
+Slide 18: Basic Implementation (1)
+
+    Lists tools and technologies for basic implementation:
+        Ambari: Monitoring and provisioning manager.
+        Grafana: Monitoring dashboard for visualizing data.
+        Nifi: Tool for data flow automation.
+        Ranger: Data security management tool.
+
+Slide 19: Basic Implementation (2)
+
+    Continues with additional tools for implementation:
+        Superset: Interactive data exploration and visualization tool.
+        Zeppelin: Web-based notebook for data-driven analytics and collaborative documentation.
+
+Slide 20: Pusat Data Analitik
+
+    This slide likely refers to a data analytics center, emphasizing the importance of centralized data analysis capabilities.
+
+Slide 21: Pusat Data Analitik (2)
+
+    Further elaboration on the data analytics center, possibly discussing its functions or significance.
+
+Slide 22: Hardware Specifications
+
+    Provides detailed hardware specifications for different nodes in the infrastructure:
+        Master, Utility, and Gateway Nodes:
+            46 1TB hard disks in a JBOD configuration.
+            2 quad-/hex-/octo-core CPUs (2-2.5GHz).
+            24-64GB of RAM.
+            Bonded Gigabit or 10Gigabit Ethernet.
+        Data Nodes:
+            12-24 1-4TB hard disks in a JBOD configuration.
+            Similar CPU and RAM specifications as above.
+
+Slide 23: Conclusion
+
+    The presentation concludes with a thank you note, indicating the end of the session and expressing gratitude to the audience for their attention.
+
+This detailed summary encapsulates the key points and structure of the presentation on Big Data and the RAMES framework, highlighting its significance, components, and practical applications.
+
+
+RAMES KEY FEATURES
+The key features of rames big data platform
+
+ANY DATA
+Our platform supports diverse upstream data sources, ensuring compatibility and
+flexibility across various formats and types.
+Crawling Engines: Seamlessly integrates with web crawlers to ingest data from
+websites and other online sources. This is particularly useful for web scraping,
+competitive analysis, or market intelligence.
+Remote Applications: Handles logs from web, mobile, or other applications, enabling
+you to analyze user behavior, system performance, and more.
+Traditional RDBMS: Connects to conventional relational databases, importing
+structured data from legacy systems.
+Traditional Files and Spreadsheets: Supports common file formats like CSV, Excel,
+and others, enabling rapid onboarding of manual or historical data.
+Structured, Semi-structured, and Unstructured Data: Whether its relational tables,
+JSON files, or multimedia files like images or videos, our platform can manage and
+process these efficiently.
+Governance and Versatility: Comprehensive data governance capabilities ensure data
+quality and compliance, making the platform adaptable to meet diverse objectives.
+
+Rames Key Features
+
+Page 02
+
+LARGE DATASET
+Our architecture is built to handle massive data volumes effortlessly.
+Fast Query Performance: Execute complex queries on datasets as large as 1 billion
+rows in under 2 seconds using standard hardware.
+Scalability: Designed to scale with your growing data needs without compromising
+performance.
+
+Rames Key Features
+
+Page 03
+
+FAULT
+TOLERANT
+Reliability is a cornerstone of our platform.
+Cluster and Node Management: Continuously monitors the system to detect and
+address faults promptly.
+Seamless Continuity: Ensures uninterrupted services even during unexpected issues,
+maintaining system uptime and operational efficiency.
+
+Rames Key Features
+
+Page 04
+
+SERVICE
+MONITORING
+Proactively manages system health with:
+Default Monitoring Tools: Tracks performance metrics and operational status of all
+components.
+Alerting System: Provides real-time notifications for potential issues, enabling quick
+resolution.
+
+Rames Key Features
+
+Page 05
+
+HARDWARE
+EFFICIENCY
+Optimized for resource utilization:
+Network Traffic Reduction: Minimizes data transfer overhead, improving
+performance during large-scale data operations.
+Processing Speed: Leverages efficient algorithms and resource allocation strategies
+for faster computation.
+
+Rames Key Features
+
+Page 08
+
+MULTIPLE OUTPUT
+FORMATS
+Supports diverse output requirements:
+Custom Dashboards: Provides tailored visualizations for real-time insights.
+Reports and Analytics: Generates detailed reports and data summaries.
+API Interfaces: Facilitates integration with downstream applications, enabling
+seamless data exchange and automation.
+
+Rames Key Features
+
+Page 07
+
+WIDE VARIETY OF
+COMPONENTS
+Integrated solutions for end-to-end big data workflows:
+Analytics Engines: Perform complex data analysis to extract actionable insights.
+Distributed Query Engine: Executes queries across distributed datasets for scalable
+analytics.
+Visualization Tools: Offers powerful tools for creating meaningful data
+representations.
+14 Integrated Components: A comprehensive ecosystem to support every stage of
+your data journey.
+
+Rames Key Features
+
+Page 08
+
+ADVANCED
+PACKAGE
+MANAGEMENT
+SYSTEM
+Ensures robust and reliable system installations:
+Custom Installation Scripts: Streamlines deployment and minimizes setup errors.
+Integrated Environment: Guarantees that all components work seamlessly together.
+
+Rames Key Features
+
+Page 09
+
+CONFIGURATION
+MANAGEMENT
+Simplifies system administration:
+Centralized Configurations: Allows easy customization and fine-tuning of individual
+components.
+Integration-Ready: Ensures smooth interoperability between all platform modules.
+
+Rames Key Features
+
+Page 10
+
+100% INDONESIAN
+LOCAL REPOSITORY
+Committed to meeting local compliance and operational efficiency:
+Localized Repository: Ensures data sovereignty and compliance with Indonesian
+regulations.
+System Control: Maintains local infrastructure for better performance and faster issue
+resolution.
+
+Rames Key Features
+
+Page 11
+
+THANK YOU
+
+List of rames components
+atlas
+drill
+elasticsearch
+impala
+knox
+livy
+neo4j
+nifi
+nifi2
+phoenix
+presto
+superset
+trino
+
