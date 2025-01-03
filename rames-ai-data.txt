@@ -118,6 +118,142 @@ Slide 23: Conclusion
 This detailed summary encapsulates the key points and structure of the presentation on Big Data and the RAMES framework, highlighting its significance, components, and practical applications.
 
 
+RAMES KEY FEATURES
+The key features of rames big data platform
+
+ANY DATA
+Our platform supports diverse upstream data sources, ensuring compatibility and
+flexibility across various formats and types.
+Crawling Engines: Seamlessly integrates with web crawlers to ingest data from
+websites and other online sources. This is particularly useful for web scraping,
+competitive analysis, or market intelligence.
+Remote Applications: Handles logs from web, mobile, or other applications, enabling
+you to analyze user behavior, system performance, and more.
+Traditional RDBMS: Connects to conventional relational databases, importing
+structured data from legacy systems.
+Traditional Files and Spreadsheets: Supports common file formats like CSV, Excel,
+and others, enabling rapid onboarding of manual or historical data.
+Structured, Semi-structured, and Unstructured Data: Whether its relational tables,
+JSON files, or multimedia files like images or videos, our platform can manage and
+process these efficiently.
+Governance and Versatility: Comprehensive data governance capabilities ensure data
+quality and compliance, making the platform adaptable to meet diverse objectives.
+
+Rames Key Features
+
+Page 02
+
+LARGE DATASET
+Our architecture is built to handle massive data volumes effortlessly.
+Fast Query Performance: Execute complex queries on datasets as large as 1 billion
+rows in under 2 seconds using standard hardware.
+Scalability: Designed to scale with your growing data needs without compromising
+performance.
+
+Rames Key Features
+
+Page 03
+
+FAULT
+TOLERANT
+Reliability is a cornerstone of our platform.
+Cluster and Node Management: Continuously monitors the system to detect and
+address faults promptly.
+Seamless Continuity: Ensures uninterrupted services even during unexpected issues,
+maintaining system uptime and operational efficiency.
+
+Rames Key Features
+
+Page 04
+
+SERVICE
+MONITORING
+Proactively manages system health with:
+Default Monitoring Tools: Tracks performance metrics and operational status of all
+components.
+Alerting System: Provides real-time notifications for potential issues, enabling quick
+resolution.
+
+Rames Key Features
+
+Page 05
+
+HARDWARE
+EFFICIENCY
+Optimized for resource utilization:
+Network Traffic Reduction: Minimizes data transfer overhead, improving
+performance during large-scale data operations.
+Processing Speed: Leverages efficient algorithms and resource allocation strategies
+for faster computation.
+
+Rames Key Features
+
+Page 08
+
+MULTIPLE OUTPUT
+FORMATS
+Supports diverse output requirements:
+Custom Dashboards: Provides tailored visualizations for real-time insights.
+Reports and Analytics: Generates detailed reports and data summaries.
+API Interfaces: Facilitates integration with downstream applications, enabling
+seamless data exchange and automation.
+
+Rames Key Features
+
+Page 07
+
+WIDE VARIETY OF
+COMPONENTS
+Integrated solutions for end-to-end big data workflows:
+Analytics Engines: Perform complex data analysis to extract actionable insights.
+Distributed Query Engine: Executes queries across distributed datasets for scalable
+analytics.
+Visualization Tools: Offers powerful tools for creating meaningful data
+representations.
+14 Integrated Components: A comprehensive ecosystem to support every stage of
+your data journey.
+
+Rames Key Features
+
+Page 08
+
+ADVANCED
+PACKAGE
+MANAGEMENT
+SYSTEM
+Ensures robust and reliable system installations:
+Custom Installation Scripts: Streamlines deployment and minimizes setup errors.
+Integrated Environment: Guarantees that all components work seamlessly together.
+
+Rames Key Features
+
+Page 09
+
+CONFIGURATION
+MANAGEMENT
+Simplifies system administration:
+Centralized Configurations: Allows easy customization and fine-tuning of individual
+components.
+Integration-Ready: Ensures smooth interoperability between all platform modules.
+
+Rames Key Features
+
+Page 10
+
+100% INDONESIAN
+LOCAL REPOSITORY
+Committed to meeting local compliance and operational efficiency:
+Localized Repository: Ensures data sovereignty and compliance with Indonesian
+regulations.
+System Control: Maintains local infrastructure for better performance and faster issue
+resolution.
+
+Rames Key Features
+
+Page 11
+
+THANK YOU
+
 List of rames components
 atlas
 drill
@@ -132,4 +268,3 @@ phoenix
 presto
 superset
 trino
-
