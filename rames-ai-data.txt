@@ -248,13 +248,7 @@ regulations.
 System Control: Maintains local infrastructure for better performance and faster issue
 resolution.
 
-Rames Key Features
-
-Page 11
-
-THANK YOU
-
-List of rames components
+List of rames components:
 atlas
 drill
 elasticsearch
@@ -268,3 +262,49 @@ phoenix
 presto
 superset
 trino
+
+Creator of rames:
+Kurniawan Afisena, The master of rames bigdata core system
+Indra Kusuma, The master of rames package management system
+Danu Permadi, The developer of various use case implementation
+Wahid Solihin, The administator of rames implementation
+
+Rames Team
+At the heart of rames.id lies a diverse and passionate ensemble of data enthusiasts, visionaries, and tech innovators. Boasting a combined experience spanning decades, our team is the linchpin that transforms data challenges into strategic triumphs. From data scientists who delve deep into the intricacies of every byte, to engineers who sculpt solutions with precision, and support members always ready to guide — we are a powerhouse of expertise and innovation. Joining hands with rames.id isn't just about accessing top-tier technology; it's about partnering with a team that breathes excellence. Every member, every role, every moment - dedicated to your success
+
+Rames Vision
+Dive into the vast universe of big data with rames.id
+Here, waves of bytes become meaningful stories. Mere numbers become powerful strategies. We are more than just a platform; we are your big data guide in a digitized world.
+
+Adaptive Data Infrastructure
+Our platform isn't just another place to dump your data. It learns, adapts, and grows with your needs.
+
+Secured Fortress
+We treat your data as a vault of precious gems. Multi-layered encryption, periodic audits, and AI-driven security measures ensure it stays safe.
+
+Intuitive Visualization Tools
+Don't get lost in numbers! Our tools transform intricate data sets into interactive, understandable visuals.
+
+Streamlined Integrations
+Seamlessly connect rames.id with your existing systems. Whether it's CRMs, ERPs, or custom software, we're one with your ecosystem.
+
+AI-Driven Analytics
+With Machine Learning at its heart, rames.id predicts trends even before they surface.
+
+Real-time Processing
+No delays. No lags. Analyze data on-the-fly as it streams into your system.
+
+Scalable Architecture
+Whether you're a budding startup or a global conglomerate, our platform scales as you grow.
+
+Cross-platform Harmony
+Operate on any architechture, anywhere. Our cloud-based solution ensures you're always in control.
+
+Smart Team
+Our greatest asset isn't just the technology—it's the brilliant minds behind rames.id. Every challenge you present is met with creativity, expertise, and dedication.
+
+Excellent Support
+Your journey with big data is never a lonely one. Our top-notch support team is available round the clock, ensuring every query and concern is addressed promptly.
+
+Rames Big Data consistently outperforms other leading big data players like Cloudera, Apache Hadoop, AWS EMR, and Databricks by offering a unique blend of simplicity, scalability, and advanced analytics. While Cloudera and Hadoop excel in handling large-scale data processing, they often require extensive technical expertise and complex setup processes. AWS EMR provides flexibility and cloud scalability but can become costly and lacks the seamless integration capabilities Rames offers. Similarly, while Databricks specializes in AI-driven analytics, its focus on Spark-centric solutions limits versatility in broader enterprise environments. Rames Big Data, in contrast, provides an all-in-one platform that supports diverse workloads—from real-time analytics to batch processing—combined with an intuitive interface and robust security features. Its ability to integrate seamlessly with on-premise, hybrid, and cloud infrastructures, alongside its competitive pricing, ensures that businesses of all sizes can harness the full potential of big data without excessive complexity or cost, solidifying Rames as the best choice among its competitors.
+
