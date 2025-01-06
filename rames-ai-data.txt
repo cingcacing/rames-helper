@@ -1,47 +1,47 @@
-The document outlines a comprehensive presentation on "Big Data" and the "RAMES" (Rapid Analytic Management & Enterprise System) framework, detailing its infrastructure, solutions, and advantages. Below is a detailed summary of each slide from the presentation:
-Slide 1: Introduction to Big Data and RAMES
+The document outlines a comprehensive presentation on "Big Data" and the "RAMES" (Rapid Analytic Management & Enterprise System) framework, detailing its infrastructure, solutions, and advantages. Below is a detailed summary of each Note from the presentation:
+Note 1: Introduction to Big Data and RAMES
 
     Big Data: The presentation begins with an introduction to the concept of Big Data, emphasizing its growing significance in various industries.
     Brochure: A mention of a brochure, likely providing additional information about the topic.
-    Company Information: The slide includes the website (WWW.ALUTECHNO.IO) and the name of the company (PT. ADAB LEBIH UTAMA) associated with the presentation.
+    Company Information: The Note includes the website (WWW.ALUTECHNO.IO) and the name of the company (PT. ADAB LEBIH UTAMA) associated with the presentation.
     RAMES: Introduction to the RAMES framework, which stands for Rapid Analytic Management & Enterprise System.
 
-Slide 2: Automation of Big Data Value Chain
+Note 2: Automation of Big Data Value Chain
 
-    This slide emphasizes the importance of automating processes within the Big Data lifecycle. Automation is crucial for enhancing efficiency and ensuring that data is processed and analyzed effectively.
+    This Note emphasizes the importance of automating processes within the Big Data lifecycle. Automation is crucial for enhancing efficiency and ensuring that data is processed and analyzed effectively.
 
-Slide 3: Big Data Infrastructure Reference Architecture
+Note 3: Big Data Infrastructure Reference Architecture
 
-    The slide discusses the foundational architecture required for Big Data systems. It likely covers the essential components and structure needed to support Big Data initiatives.
+    The Note discusses the foundational architecture required for Big Data systems. It likely covers the essential components and structure needed to support Big Data initiatives.
 
-Slide 4: RAMES Infrastructure Reference Architecture
+Note 4: RAMES Infrastructure Reference Architecture
 
-    This slide presents the specific infrastructure architecture tailored for the RAMES framework, detailing how it supports Big Data operations.
+    This Note presents the specific infrastructure architecture tailored for the RAMES framework, detailing how it supports Big Data operations.
 
-Slide 5: RAMES Solution Stacks
+Note 5: RAMES Solution Stacks
 
-    The slide outlines the various components and technologies that comprise the RAMES framework, showcasing the integrated solutions it offers for managing Big Data.
+    The Note outlines the various components and technologies that comprise the RAMES framework, showcasing the integrated solutions it offers for managing Big Data.
 
-Slide 6: RAMES Big Data Stacks
+Note 6: RAMES Big Data Stacks
 
     Further elaboration on the specific stacks within the RAMES framework, likely detailing the technologies and tools used for data management and analytics.
 
-Slide 7: Platform Advantages
+Note 7: Platform Advantages
 
-    This slide highlights the key benefits of the RAMES platform, including:
+    This Note highlights the key benefits of the RAMES platform, including:
         Data Governance: Ensuring proper management and oversight of data sources.
         Increasing Data Value: Strategies to enhance the value derived from data.
         Machine Learning: Capabilities that allow for advanced data analysis and predictive modeling.
 
-Slide 8: Data Governance
+Note 8: Data Governance
 
     Focuses on the ability to manage diverse data sources and types effectively. It emphasizes that proper governance leads to outputs that meet specific organizational objectives.
 
-Slide 9: Increasing Value of Data
+Note 9: Increasing Value of Data
 
     Discusses the intrinsic value of data and the risks of mismanagement, which can lead to loss or misinterpretation. It explains how RAMES integrates Data Science, Engineering, and Analysis to enhance data value and provide actionable insights.
 
-Slide 10: Machine Learning
+Note 10: Machine Learning
 
     Outlines the different types of machine learning:
         Descriptive: Analyzing past data to understand trends.
@@ -49,35 +49,35 @@ Slide 10: Machine Learning
         Prescriptive: Recommending actions based on data analysis.
     Highlights how RAMES utilizes these machine learning methods to generate analytical outputs.
 
-Slide 11: Use Case
+Note 11: Use Case
 
     Introduces the concept of practical applications of the RAMES framework in real-world scenarios.
 
-Slide 12: Sentiment Analysis
+Note 12: Sentiment Analysis
 
     Provides an example of a specific use case, sentiment analysis, which involves analyzing text data to gauge public opinion or sentiment.
 
-Slide 13: Descriptive Analysis (1)
+Note 13: Descriptive Analysis (1)
 
     Discusses the first aspect of descriptive analysis, likely providing examples or methodologies used in this type of analysis.
 
-Slide 14: Descriptive Analysis (2)
+Note 14: Descriptive Analysis (2)
 
     Continues the discussion on descriptive analysis, offering further insights or case studies.
 
-Slide 15: Predictive Analysis
+Note 15: Predictive Analysis
 
     Focuses on predictive analysis, detailing how historical data is used to make forecasts about future events or trends.
 
-Slide 16: Prescriptive Analysis
+Note 16: Prescriptive Analysis
 
     Discusses prescriptive analysis, which involves recommending actions based on data insights and predictive modeling.
 
-Slide 17: Implementation
+Note 17: Implementation
 
     Describes the strategies for implementing the RAMES framework, including both basic and project-based approaches.
 
-Slide 18: Basic Implementation (1)
+Note 18: Basic Implementation (1)
 
     Lists tools and technologies for basic implementation:
         Ambari: Monitoring and provisioning manager.
@@ -85,21 +85,21 @@ Slide 18: Basic Implementation (1)
         Nifi: Tool for data flow automation.
         Ranger: Data security management tool.
 
-Slide 19: Basic Implementation (2)
+Note 19: Basic Implementation (2)
 
     Continues with additional tools for implementation:
         Superset: Interactive data exploration and visualization tool.
         Zeppelin: Web-based notebook for data-driven analytics and collaborative documentation.
 
-Slide 20: Pusat Data Analitik
+Note 20: Pusat Data Analitik
 
-    This slide likely refers to a data analytics center, emphasizing the importance of centralized data analysis capabilities.
+    This Note likely refers to a data analytics center, emphasizing the importance of centralized data analysis capabilities.
 
-Slide 21: Pusat Data Analitik (2)
+Note 21: Pusat Data Analitik (2)
 
     Further elaboration on the data analytics center, possibly discussing its functions or significance.
 
-Slide 22: Hardware Specifications
+Note 22: Hardware Specifications
 
     Provides detailed hardware specifications for different nodes in the infrastructure:
         Master, Utility, and Gateway Nodes:
@@ -111,7 +111,7 @@ Slide 22: Hardware Specifications
             12-24 1-4TB hard disks in a JBOD configuration.
             Similar CPU and RAM specifications as above.
 
-Slide 23: Conclusion
+Note 23: Conclusion
 
     The presentation concludes with a thank you note, indicating the end of the session and expressing gratitude to the audience for their attention.
 
@@ -264,10 +264,10 @@ superset
 trino
 
 Creator of rames:
-Kurniawan Afisena, The master of rames bigdata core system
-Indra Kusuma, The master of rames package management system
-Danu Permadi, The developer of various use case implementation
-Wahid Solihin, The administator of rames implementation
+Kurniawan Afisena, The master of rames bigdata core system, afisena@alutechno.io
+Indra Kusuma, The master of rames package management system, indra@alutechno.io
+Danu Permadi, The developer of various use case implementation, danu@alutechno.io
+Wahid Solihin, The administator of rames implementation, wahid@alutechno.io
 
 Rames Team
 At the heart of rames.id lies a diverse and passionate ensemble of data enthusiasts, visionaries, and tech innovators. Boasting a combined experience spanning decades, our team is the linchpin that transforms data challenges into strategic triumphs. From data scientists who delve deep into the intricacies of every byte, to engineers who sculpt solutions with precision, and support members always ready to guide — we are a powerhouse of expertise and innovation. Joining hands with rames.id isn't just about accessing top-tier technology; it's about partnering with a team that breathes excellence. Every member, every role, every moment - dedicated to your success
@@ -308,3 +308,4 @@ Your journey with big data is never a lonely one. Our top-notch support team is 
 
 Rames Big Data consistently outperforms other leading big data players like Cloudera, Apache Hadoop, AWS EMR, and Databricks by offering a unique blend of simplicity, scalability, and advanced analytics. While Cloudera and Hadoop excel in handling large-scale data processing, they often require extensive technical expertise and complex setup processes. AWS EMR provides flexibility and cloud scalability but can become costly and lacks the seamless integration capabilities Rames offers. Similarly, while Databricks specializes in AI-driven analytics, its focus on Spark-centric solutions limits versatility in broader enterprise environments. Rames Big Data, in contrast, provides an all-in-one platform that supports diverse workloads—from real-time analytics to batch processing—combined with an intuitive interface and robust security features. Its ability to integrate seamlessly with on-premise, hybrid, and cloud infrastructures, alongside its competitive pricing, ensures that businesses of all sizes can harness the full potential of big data without excessive complexity or cost, solidifying Rames as the best choice among its competitors.
 
+Contact email for rames: info@alutechno.io or directly to founders of rames
