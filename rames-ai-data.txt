@@ -309,3 +309,985 @@ Your journey with big data is never a lonely one. Our top-notch support team is 
 Rames Big Data consistently outperforms other leading big data players like Cloudera, Apache Hadoop, AWS EMR, and Databricks by offering a unique blend of simplicity, scalability, and advanced analytics. While Cloudera and Hadoop excel in handling large-scale data processing, they often require extensive technical expertise and complex setup processes. AWS EMR provides flexibility and cloud scalability but can become costly and lacks the seamless integration capabilities Rames offers. Similarly, while Databricks specializes in AI-driven analytics, its focus on Spark-centric solutions limits versatility in broader enterprise environments. Rames Big Data, in contrast, provides an all-in-one platform that supports diverse workloads—from real-time analytics to batch processing—combined with an intuitive interface and robust security features. Its ability to integrate seamlessly with on-premise, hybrid, and cloud infrastructures, alongside its competitive pricing, ensures that businesses of all sizes can harness the full potential of big data without excessive complexity or cost, solidifying Rames as the best choice among its competitors.
 
 Contact email for rames: info@alutechno.io or directly to founders of rames
+
+
+
+Instalasi Platform
+Optimalisasi Data Dan Informasi Layanan RAMES Online melalui Business Intelligence
+
+
+Versi 1.0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DAFTAR ISI
+DAFTAR ISI	4
+A.	PENDRAMESLUAN	5
+B.	PRASYARAT	6
+C.	PERSIAPAN INSTALASI	7
+D.	INSTALASI MANAGEMENT SERVER	13
+E.	KONFIGURASI CLUSTER	15
+F.	INSTALASI KOMPONEN RAMES BIG DATA DI CLUSTER	18
+G.	MENAMBAHKAN KOMPONEN TAMBAHAN DI STACK RAMESBI	33
+H.	INSTALASI KOMPONEN TAMBAHAN KE CLUSTER	34
+
+
+
+
+
+A. PENDRAMESLUAN
+Dokumen ini merupakan panduan dalam proses instalasi Platform RAMES BIG DATA Release 3.3.0
+B. PRASYARAT
+Berikut adalah persyaratan yang perlu dipenuhi:
+- OS Almalinux9
+- java-1.8.0-openjdk 
+- java-1.8.0-openjdk-devel 
+- almalinux-release-devel 
+- redhat-lsb-core 
+- snappy-devel 
+- libtirpc-devel 
+- python3-devel 
+- chkconfig
+
+C. PERSIAPAN INSTALASI
+C.1 KONFIGURASI SERVER
+C.1.1 Setup Domain Name Server (DNS)
+       Daftarkan hostname dari semua server yang akan didaftarkan di cluster big data dengan menambahkan baris baru di file /etc/hosts di masing-masing server agar semua server bisa saling berkomunikasi melalui hostname atau DNS system di masing-masing nodes dengan format sebagai berikut:
+
+# IP FQDN Alias
+
+Seperti contoh berikut ini:
+# cat /etc/hosts
+192.168.180.135 RAMES Big Data-e01.RAMES.go.id RAMES Big Data-e01
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+#RAMES BIG DATA-cluster
+192.168.180.135    RAMES Big Data-e01.RAMES.go.id   RAMES Big Data-e01
+192.168.180.136    RAMES Big Data-m01.RAMES.go.id   RAMES Big Data-m01
+192.168.180.137    RAMES Big Data-d01.RAMES.go.id   RAMES Big Data-d01
+192.168.180.138    RAMES Big Data-d02.RAMES.go.id   RAMES Big Data-d02
+
+Lakukan perintah berikut untuk memastikan server dapat dikenali baik berdasarkan alamat IP maupun hostname
+# getent hosts 192.168.180.135
+192.168.180.135    RAMES Big Data-e01.RAMES.go.id   RAMES Big Data-e01
+
+# getent hosts RAMES Big Data-e01.RAMES.go.id
+192.168.180.135    RAMES Big Data-e01.RAMES.go.id   RAMES Big Data-e01
+C.1.2 Setup Passwordless Access dari Server Ambari Ke Seluruh Server di Cluster
+Pada server yang akan dijadikan sebagai master host, lakukan setup passwordless access ke seluruh server / node yang akan didaftarkan ke dalam cluster big data. Hal ini dimaksudkan agar Ambari-server dapat melakukan remote access ke server-server yang terdaftar di cluster untuk melakukan instalasi service-service big data di node tersebut, seperti service ambari-agent, maupun service-service lainnya. Berikut adalah Langkah-langkah yang perlu dijalankan untuk setup passwordless access:
+
+1. Generate SSH Key di server yang akan di-install Ambari server:
+# ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa): 
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /root/.ssh/id_rsa.
+Your public key has been saved in /root/.ssh/id_rsa.pub.
+The key fingerprint is:
+
+#ssh-keygen -p -m PEM -f ~/.ssh/id_rsa
+
+2. Copy SSH Public Key di server Ambari ke seluruh nodes yang ada di cluster
+# ssh-copy-id root@192.168.180.135
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/root/.ssh/id_rsa.pub"
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+root@192.168.180.135's password: 
+
+Number of key(s) added: 1
+
+Now try logging into the machine, with:   "ssh ' root@192.168.180.135'"
+3. Jika langkah 2 tidak berhasil, dapat dilakukan manual copy public key server ambari dengan path ~/.ssh/id_rsa.pub ke node lain yang ada di cluster di ~/.ssh/authorized_keys
+4. Lakukan ssh ke server tersebut untuk memastikan server Ambari dapat terhubung ke server tersebut tanpa password
+[root@192.168.180.135 ~]# ssh root@192.168.180.136
+
+[root@192.168.180.136 ~]#
+5. Ulangi Langkah ke-3 dan ke-4 untuk seluruh server yang akan didaftarkan di cluster
+C.1.3 Menonaktifkan Security Enhanced Linux (SELinux)
+SElinux merupakan kernel keamanan linux yang memungkinkan administrator memiliki kontrol penuh terhadap siapa saja yang dapat mengakses sistem dan mengatur kebijakannya. Fitur ini memungkinkan untuk membuka port tertentu di system operasi dan dapat menghambat proses instalasi service-service RAMES BIG DATA. 
+
+Matikan fitur SELinux untuk memastikan proses instalasi berjalan dengan baik dengan melakukan lang-langkah berikut:
+1. Ketik perintah setenforce 0 
+2. Edit file c, ubah nilai pada item SELINUX menjadi DISABLED
+SELINUX=disabled
+SELINUXTYPE=targeted
+3. Restart server
+4. Pastikan SELinux sudah dinonaktifkan dengan perintah berikut
+# sestatus
+SELinux status:                 disabled
+Atau
+# getenforce 
+Disabled
+5. Lakukan Langkah-langkah diatas pada semua server di cluster
+C.1.4 Menonaktifkan swap dan ipv6
+Secara default fitur swap yang ada di sistem operasi Linux dalam kondisi aktif. Menonaktifkan fitur swap pada sistem operasi dimaksudkan agar performa JVM Hadoop bisa lebih optimal. Adapun ipv6 saat ini masih belum didukung oleh hadoop.
+A. Edit file /etc/sysctl.conf
+B. Tambahkan baris berikut di bagian akhir dari file tersebut, kemudian simpan
+vm.swappiness = 1
+
+# Disable ipv6 
+net.ipv6.conf.all.disable_ipv6 = 1 
+net.ipv6.conf.default.disable_ipv6 = 1 
+net.ipv6.conf.lo.disable_ipv6 = 1
+C. Jalankan perintah sysctl -p
+# sysctl -p
+kernel.panic = 10
+kernel.watchdog_thresh = 20
+net.ipv6.conf.all.disable_ipv6 = 1
+vm.swappiness = 1
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+D. Lakukan Langkah-langkah diatas pada semua server di cluster
+C.1.5 Menonaktifkan Transparent Huge Pages (THP)
+THP adalah fitur kernel Linux yang dimaksudkan untuk meningkatkan kinerja dengan membuat penggunaan lebih efisien dari perangkat keras pemetaan memori prosesor. Fitur Ini diaktifkan secara default di sebagian besar distribusi Linux. Fitur ini disarankan untuk dinonaktifkan agar tidak mengganggu performansi Hadoop.
+1. Edit file /etc/rc.local
+2. Tambahkan baris berikut pada file tersebut, kemudian simpan
+# Disable THP
+echo never > /sys/kernel/mm/transparent_hugepage/enabled 
+echo never > /sys/kernel/mm/transparent_hugepage/defrag
+3. Lakukan Langkah-langkah diatas pada semua server di cluster
+C.2 KONFIGURASI REPO AMBARI
+Repository RAMES BIG DATA di server local akan digunakan sebagai sumber utama proses instalasi seluruh service yang ada di platform big data RAMES BIG DATA. Berikut ini adalah Langkah-langkah untuk mengkonfigurasi local repo RAMES BIG DATA:
+1. Login ke server yang akan dijadikan sebagai repository local untuk proses instalasi RAMES BIG DATA.
+2. Extract source file repository RAMES BIG DATA dengan perintah berikut:
+# mkdir -p /var/www/html/RAMESbi
+# tar -xzvf RAMESbi-repo-v0.0.1.tgz -C /var/www/html/RAMESbi
+3. Install dan jalankan service httpd
+# sudo yum install -y httpd 
+# sudo systemctl start httpd 
+# sudo systemctl enable httpd
+4. Pastikan service httpd sudah berjalan dengan menjalankan perintah berikut
+# sudo systemctl status httpd
+Pastikan status dari service httpd adalah active (running)
+5. Buat file repo
+6. Tambahkan baris berikut, kemudian simpan
+[ambari-abuhi]
+name=RAMES BI Repository
+baseurl=http://192.168.180.135/RAMESbi
+gpgcheck=0
+enabled=1
+Catatan: Base url disesuaikan dengan alamat IP dan port server dimana service httpd di-install
+7. Untuk memastikan repository RAMESbi sudah berhasil didaftarkan jalankan perintah yum repolist dan pastikan repository RAMESbi sudah terdaftar
+# yum repolist
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: asi-fs-s.contabo.net
+Excluding mirror: mirror.de.leaseweb.net
+Excluding mirror: mirror.nl.leaseweb.net
+ * epel: mirror.hostnet.nl
+ * extras: mirror.aktkn.sg
+ * updates: asi-fs-s.contabo.net
+repo id                       repo name                                         status
+base/7/x86_64                 CentOS-7-Base                                     10,072
+docker-ce-nightly/7/x86_64    Docker CE Nightly - x86_64                           354
+docker-ce-stable/7/x86_64     Docker CE Stable - x86_64                            150
+docker-ce-test/7/x86_64       Docker CE Test - x86_64                              310
+epel/x86_64                   Extra Packages for Enterprise Linux 7 - x86_64    13,751
+extras/7/x86_64               CentOS-7 - Extras                                    509
+grafana                       grafana                                              489
+RAMESbi                         RAMES BI Repository                                    114
+updates/7/x86_64              CentOS-7-Updates                                   3,728
+repolist: 29,477
+8. Jika anda menginginkan selama proses instalasi semua mengambil source instalasi RAMES BIG DATA dari local server masing-masing, maka lakukan langkah-langkah di atas di semua server yang ada di cluster
+C.3 INSTALASI DATABASE 
+Database ini akan digunakan untuk menyimpan metadata dari Ambari Server dan juga semua service dari RAMES BIG DATA. Secara default Ambari sudah memiliki default database berupa postgresql. Jika Anda menginginkan Ambari untuk menggunakan database lain, lakukan langkah-langkah berikut:
+
+Database MariaDB 
+1. Install maria-db server menggunakan package manager
+sudo yum install mariadb-server
+2. Jalankan service maria-db server
+sudo systemctl start mariadb
+3. Pastikan service maria-db server sudah berjalan
+sudo systemctl status mariadb
+pastikan status dari service mariadb adalah active (running)
+4. Untuk memastikan service maria-db otomatis berjalan pada saat server di-restart, jalankan perintah berikut
+sudo systemctl enable mariadb
+5. Jalankan perintah berikut untuk mengamankan mariadb server
+sudo mysql_secure_installation
+kemudian akan muncul tampilan seperti berikut
+NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB
+      SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!
+
+In order to log into MariaDB to secure it, we'll need the current
+password for the root user.  If you've just installed MariaDB, and
+you haven't set the root password yet, the password will be blank,
+so you should just press enter here.
+
+Enter current password for root (enter for none): 
+OK, successfully used password, moving on...
+
+Setting the root password ensures that nobody can log into the MariaDB
+root user without the proper authorisation.
+
+You already have a root password set, so you can safely answer 'n'.
+
+Change the root password? [Y/n] n
+ ... skipping.
+
+By default, a MariaDB installation has an anonymous user, allowing anyone
+to log into MariaDB without having to have a user account created for
+them.  This is intended only for testing, and to make the installation
+go a bit smoother.  You should remove them before moving into a
+production environment.
+
+Remove anonymous users? [Y/n] y
+ ... Success!
+
+Normally, root should only be allowed to connect from 'localhost'.  This
+ensures that someone cannot guess at the root password from the network.
+
+Disallow root login remotely? [Y/n] y
+ ... Success!
+
+By default, MariaDB comes with a database named 'test' that anyone can
+access.  This is also intended only for testing, and should be removed
+before moving into a production environment.
+
+Remove test database and access to it? [Y/n] y
+ - Dropping test database...
+ERROR 1008 (HY000) at line 1: Can't drop database 'test'; database doesn't exist
+ ... Failed!  Not critical, keep moving...
+ - Removing privileges on test database...
+ ... Success!
+
+Reloading the privilege tables will ensure that all changes made so far
+will take effect immediately.
+
+Reload privilege tables now? [Y/n] y
+ ... Success!
+
+Cleaning up...
+
+All done!  If you've completed all of the above steps, your MariaDB
+installation should now be secure.
+
+Thanks for using MariaDB!
+
+Catatan:
+- Change the root password? - Ini ditanyakan apakah ingin mengganti password root MySQL. Karena baru saja menginstall dan menggunakan kata sandi yang kuat maka saya jawab tidak.
+- Remove anonymous users? - Menghapus user anonim, jenis pengguna ini bisa masuk ke database server tanpa username dan password. Diciptakan untuk testing sebenarnya, tapi banyak yang tidak tRAMES dan ada resiko disalahgunakan. Sebaiknya dibuang.
+- Disallow root login remotely? - Mematikan akses user root dari luar server. Menggunakan root disarankan hanya dari dalam server itu sendiri untuk mencegah terjadinya hal - hal yang tidak diinginkan.
+- Remove test database and access to it? - Selain user untuk testing MariaDB server juga menyertakan sebuah database tes. Hapus database tes ini jika Anda tidak menginginkannya.
+- Reload privilege tables now? - Setelah semua setting diatas dilakukan dan mengkonfirmasi perubahannya, pastikan kembali hak akses pengguna dan databasenya sudah sesuai
+6. Testing hasil instalasi database mariadb
+# mysqladmin -u root -p version
+Enter password: 
+mysqladmin  Ver 9.0 Distrib 5.5.68-MariaDB, for Linux on x86_64
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Server version		5.5.68-MariaDB
+Protocol version	10
+Connection		Localhost via UNIX socket
+UNIX socket		/var/lib/mysql/mysql.sock
+Uptime:			1 min 59 sec
+
+Threads: 9  Questions: 764  Slow queries: 0  Opens: 4  Flush tables: 2  Open tables: 30  Queries per second avg: 6.420
+
+D. INSTALASI MANAGEMENT SERVER
+Management server berfungsi sebagai pusat pengaturan, instalasi, dan provisioning service-service yang ada di RAMES BIG DATA. Dalam hal ini RAMES BIG DATA menggunakan Ambari sebagai management server
+D.1 INSTALASI AMBARI SERVER
+Berikut adalah Langkah-langkah proses instalasi ambari server
+1. Pastikan proses instalasi Ambari mengambil source instalasi dari repository RAMES BIG DATA yang sudah didefinisikan di atas dengan perintah berikut
+# sudo yum list ambari-server
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: asi-fs-s.contabo.net
+Excluding mirror: mirror.de.leaseweb.net
+Excluding mirror: mirror.nl.leaseweb.net
+ * epel: mirror.hostnet.nl
+ * extras: mirror.aktkn.sg
+ * updates: asi-fs-s.contabo.net
+Installed Packages
+ambari-server.noarch                                 2.7.5.0-1.el7                                 
+2. Install ambari-server
+# sudo dnf install ambari-server
+3. Start servis ambari-server
+# sudo ambari-server start
+4. Cek status ambari-server
+# sudo ambari-server status
+Using python  /usr/bin/python
+Ambari-server status
+Ambari Server running
+Found Ambari Server PID: 3972 at: /var/run/ambari-server/ambari-server.pid
+D.2 KONFIGURASI AMBARI SERVER DENGAN DATABASE KUSTOM
+Berikut Langkah-langkah untuk menjalankan ambari-server menggunakan database kustom
+1. Buat database dan user ambari di database, kemudian berikan hak akses kepada user ambari untuk mengakses resource di database ambari
+MariaDB [(none)]> create database ambari;
+MariaDB [(none)]> create user 'ambari'@'%' identified by '<password Anda>;
+MariaDB [(none)]> grant all privileges on ambari.* to 'ambari'@'%';
+MariaDB [(none)]> flush privileges;
+2. Login sebagai user ambari dengan database ambari untuk memastikan pembuatan database dan user sudah berhasil, kemudian keluar dari command line mariadb
+# mysql -uambari -p ambari
+Enter password: 
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 18
+Server version: 5.5.68-MariaDB MariaDB Server
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [ambari]>
+3. Jalankan perintah berikut untuk mengimpor object-object ambari server
+mysql -uambari -p ambari < /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
+4. Lakukan setup ambari untuk menggunakan database kustom dengan menjalankan perintah berikut
+ambari-server setup
+kemudian masukkan nama database dan user yang sudah disiapkan diatas
+5. Jalankan servis ambari server dan pastikan servis sudah berjalan secara normal
+# ambari-server start
+# ambari-server status
+Using python  /usr/bin/python
+Ambari-server status
+Ambari Server running
+Found Ambari Server PID: 3972 at: /var/run/ambari-server/ambari-server.pid
+6. Jika servis server ambari sudah berjalan, Anda dapat mengakses halaman login ambari server di lokasi http://192.168.180.135:8080 seperti berikut
+
+Gambar 1 Halaman Login Ambari
+E. KONFIGURASI CLUSTER
+Pada bagian akan dijelaskan Langkah-langkah untuk setup cluster dan instalasi servis-servis RAMES BIG DATA.
+E.1 MEMBUAT CLUSTER BARU DI AMBARI SERVER
+Untuk dapat melakukan instalasi servis-servis RAMES BIG DATA, terlebih dRAMESlu Anda harus membuat cluster baru melalui ambari server dan medaftarkan server-server yang akan digunakan di cluster tersebut.
+1. Login ke ambari server, kemudian Anda akan mendapati tampilan seperti di bawah ini pada saat pertama kali login
+
+Gambar 2 Halaman Utama Ambari Server
+2. Buat cluster baru dengan menekan tombol Launch Install Wizard, kemudian isi nama cluster
+
+Gambar 3 Membuat Cluster
+Kemudian tekan tombol Next untuk melanjutkan proses
+3. Pilih versi RAMESBI yang akan di-install dan isikan repository RAMESbi yang sudah didefinsikan di atas. Tekan tombol Next untuk melanjutkan ke proses selanjutnya
+
+Gambar 4 Konfigurasi repository RAMESbi
+4. Pada Install Options, isi target hosts dengan FQDN host yang akan dimasukkan ke dalam cluster. Pilih Provide your SSH Private Key to automatically register hosts lalu isi form dengan ssh private key dari masing-masing host. Set ssh user account value dengan "root", default port 22. Tekan tombol REGISTER AND CONFIRM untuk melanjutkan proses.
+
+5. Proses Confirm Hosts. Tunggu hingga proses instalasi selesai dan pastikan all hosts status success. Jika sudah, tekan Next untuk melanjutkan proses.
+
+Gambar 5 Proses Install Hosts
+6. Selanjutnya instalasi HDFS File System. Untuk panduannya dapat dilihat di bagian Instalasi Komponen RAMES BIG DATA di Cluster sub bagian HDFS.
+
+
+E.2 KONFIGURASI SERVICE DI CLUSTER
+Untuk konfigurasi service di cluster, secara default harus terinstal service -service sebagai berikut : 
+1. HDFS ( Hadoop File System )
+2. YARN
+3. MapReduce2
+4. Zookeeper
+5. Tez
+6. Hive
+7. HBase
+8. Spark
+9. Kafka
+10. Zeppelin
+11. Flink
+12. Infra Solr
+13. Ambari Metrics
+
+Adapun komponen tambahan yang dapat di instal menggunakan mpack adalah sebagai berikut : 
+1. Nifi2
+2. Trino
+3. Superset
+4. Phoenix
+E.3 MENGHAPUS SERVICE DARI CLUSTER
+1. Pilih service yang akan dihapus.
+2. Tekan Action.
+3. Tekan Stop.
+4. Setelah proses stop service selesai, tekan Action lalu Delete Service.
+5. Beberapa service terdapat dependensi dengan service lain, pastikan service dependensi nya sudah dihapus terlebih dRAMESlu.
+6. Tunggu hingga proses delete service selesai.
+E.4 MENAMBAHKAN NODE BARU KE CLUSTER
+1. Tekan menu Host
+2. Tekan Actions.
+3. Pilih Add New Host.
+4. Jalankan seperti pada langkah 4 Membuat Cluster Baru di Ambari.
+5. Tekan Next untuk menlajutkan proses sampai selesai.
+E.5 MENGHAPUS NODE DARI CLUSTER
+1. Tekan menu Host.
+2. Centang pada node yang akan dihapus.
+3. Tekan Actions ? Selected Host ? Hosts ? Stop All Components.
+4. Tunggu sampai proses stop components selesai.
+5. Tekan Actions ? Selected Host ? Hosts ? Delete Host.
+F. INSTALASI KOMPONEN RAMES BIG DATA DI CLUSTER
+pada bagian ini akan dijelaskan mengenai langkah-langkah dalam instalasi komponen stack RAMESBI ke Cluster
+F.1 HDFS
+1. Pada langkah Choose Services, centang pada HDFS untuk memilih sebagai file system. Untuk pilihan services dapat dihilangkan dulu centangnya. Tekan Next untuk melanjutkan.
+
+Gambar 6 Pemilihan service HDFS
+2. Tekan Proceed Anyway.
+
+Gambar 7 Pop-up warning
+			
+
+
+3. Tentukan assignment node dengan konfigurasi sebagai berikut kemudian tekan Next.
+
+Gambar 8 Asignment Node HDFS
+4. Set konfigurasi Datanode dan Client sesuai gambar di bawah. Tekan Next
+
+Gambar 9 Konfigurasi datanode dan client HDFS
+			
+5. Pada customize service, set HDFS direktori. Jika ingin default, tekan Next untuk melanjutkan proses.
+
+Gambar 10 Konfigurasi direktori HDFS
+
+6. Konfigurasi accounts default, tekan Next.
+
+Gambar 11 Konfigurasi akun HDFS
+
+7. Pada Advanced configuration -> Advanced core-site, hadoop proxyuser value diisi dengan *. Tekan Next untuk melanjutkan.
+8. Jika review sudah sesuai, tekan Deploy.
+9. Tunggu hingga proses instalasi selesai dan success, tekan Next.
+10. Pada bagian Summary, tekan Completed.
+
+F.2 YARN, MAPREDUCE2 DAN ZOOKEEPER
+1. Pada menu Services, tekan ... lalu pilih Add Service. Centang pada YARN lalu tekan Next.
+
+Gambar 12 Pemilihan service YARN
+
+2. Instalasi YARN membutuhkan MAPREDUCE2 dan ZOOKEEPER. Tekan OK pada pop-up notification yang muncul.
+
+Gambar 13 Pop-up notifikasi MapReduce2
+
+
+Gambar 14 Pop-up notifikasi Zookeeper
+
+3. Tentukan assignment node dengan konfigurasi sebagai berikut kemudian tekan Next.
+
+Gambar 15 Asignment Node Zookeeper
+
+4. Set konfigurasi Datanode, Nodemanager dan Client sesuai gambar di bawah. Tekan Next
+
+Gambar 16 Konfigurasi datanode, nodemanager dan client
+
+5. Set konfigurasi service default, tekan Next.
+
+Gambar 17 Konfigurasi default YARN
+
+
+
+Gambar 18 Konfigurasi default MapReduce2
+
+
+Gambar 19 Konfigurasi default Zookeeper
+
+6. Jika muncul Pop Up Notifikasi, tekan Proceed Anyway.
+7. Jika review sudah sesuai, tekan Deploy.
+8. Tunggu hingga proses instalasi selesai dan success, tekan Next.
+9. Pada bagian Summary, tekan Completed.
+
+F.3 TEZ
+1. Pada menu Services, tekan ... lalu pilih Add Service. Centang pada Tez lalu tekan Next.
+
+Gambar 20 Pemilihan service Tez
+
+2. Set konfigurasi Datanode, Nodemanager dan Client sesuai gambar di bawah. Tekan Next.
+
+Gambar 21 Konfigurasi datanode, nodemanager dan client Tez
+
+3. Set konfigurasi service default, tekan Next.
+
+Gambar 22 Konfigurasi default Tez
+
+4. Jika muncul Pop Up Notifikasi, tekan Proceed Anyway.
+5. Jika review sudah sesuai, tekan Deploy.
+6. Tunggu hingga proses instalasi selesai dan success, tekan Next.
+7. Pada bagian Summary, tekan Completed.
+F.4 HIVE
+1. Pada menu Services, tekan ... lalu pilih Add Service. Centang pada Hive lalu tekan Next.
+
+Gambar 23 Pemilihan service Hive
+
+2. Tentukan assignment node dengan konfigurasi sebagai berikut kemudian tekan Next.
+
+Gambar 24 Asignment Node Hive
+
+3. Set konfigurasi Datanode, Nodemanager dan Client sesuai gambar di bawah. Tekan Next.
+
+Gambar 25 Konfigurasi datanode, nodemanager dan client Hive
+
+4. Set Database Configurations. Sebelum mengatur konfigurasi ini, pastikan database hive sudah dibuat terlebih dRAMESlu. Pada hive database, pilih Existing MySQL / MariaDB. Isikan Database name, username dan password sesuai dengan database yang sudah dibuat sebelumnya. Value database url menyesuaikan host dimana MySQL diinstal. Jalankan command pada kotak oranye di host ambari server. Tekan Test Connection dan pastikan Connection OK. Tekan Next untuk melanjutkan proses instalasi.
+
+Gambar 26 Konfigurasi database Hive
+
+5. Jika muncul Pop Up Notifikasi, tekan Proceed Anyway.
+6. Jika review sudah sesuai, tekan Deploy.
+7. Tunggu hingga proses instalasi selesai dan success, tekan Next.
+8. Pada bagian Summary, tekan Completed.
+
+F.5 HBASE
+1. Pada menu Services, tekan ... lalu pilih Add Service. Centang pada HBase lalu tekan Next.
+
+Gambar 27 Pemilihan service HBase
+
+2. Tentukan assignment node sesuai konfigurasi dibawah ini kemudian tekan Next.
+
+Gambar 28 Asignment Node HBASE
+
+3. Set konfigurasi service default, tekan Next.
+
+Gambar 29 Konfigurasi default HBase
+
+4. Jika muncul Pop Up Notifikasi, tekan Proceed Anyway.
+5. Jika review sudah sesuai, tekan Deploy.
+6. Tunggu hingga proses instalasi selesai dan success, tekan Next.
+7. Pada bagian Summary, tekan Completed.
+
+F.6 ZEPPELIN
+1. Pada menu Services, tekan ... lalu pilih Add Service. Centang pada Zeppelin lalu tekan Next.
+
+Gambar 30 Pemilihan service Zeppelin
+
+2. Tentukan assignment node sesuai konfigurasi dibawah ini kemudian tekan Next.
+
+Gambar 31 Asignment Node Zeppelin
+
+3. Set konfigurasi service default, tekan Next.
+
+Gambar 32 Konfigurasi default Zeppelin
+
+4. Jika muncul Pop Up Notifikasi, tekan Proceed Anyway.
+5. Jika review sudah sesuai, tekan Deploy.
+6. Tunggu hingga proses instalasi selesai dan success, tekan Next.
+7. Pada bagian Summary, tekan Completed.
+
+
+F.7 FLINK
+1. Pada menu Services, tekan ... lalu pilih Add Service. Centang pada Flink lalu tekan Next.
+
+Gambar 33 Pemilihan service Flink
+
+2. Tentukan assignment node dengan konfigurasi sebagai berikut kemudian tekan Next.
+
+Gambar 34 Asignment Node Zookeeper
+
+3. Set konfigurasi Datanode, Nodemanager, RegionServer dan Client sesuai gambar di bawah. Tekan Next.
+
+Gambar 35 Konfigurasi datanode dan client Flink
+4. Set konfigurasi service default, tekan Next.
+
+Gambar 36 Konfigurasi default Flink
+
+5. Jika muncul Pop Up Notifikasi, tekan Proceed Anyway.
+6. Jika review sudah sesuai, tekan Deploy.
+7. Tunggu hingga proses instalasi selesai dan success, tekan Next.
+8. Pada bagian Summary, tekan Completed.
+
+F.8 KAFKA, SPARK, INFRA SOLR DAN AMBARI METRICS
+1. Pada menu Services, tekan ... lalu pilih Add Service. Centang pada Kafka, Spark, Infra Solr dan Ambari Metrics lalu tekan Next.
+
+Gambar 37 Pemilihan service Kafka, Spark, Infra Solr dan Ambari Metrics
+
+2. Tentukan assignment node dengan konfigurasi sebagai berikut kemudian tekan Next.
+
+Gambar 38 Asignment Node Kafka, Spark, Infra Solr, Ambari Metrics
+
+3. Set konfigurasi Datanode, Nodemanager, RegionServer dan Client sesuai gambar di bawah. Tekan Next.
+
+Gambar 39 Konfigurasi datanode dan client
+
+4. Konfigurasi service default, kecuali Ambari Metrics. Isi value grafana admin password dengan admin : admin. Tekan Next.
+
+Gambar 40 Konfigurasi Ambari Metrics
+
+5. Jika muncul Pop Up Notifikasi, tekan Proceed Anyway.
+6. Jika review sudah sesuai, tekan Deploy.
+7. Tunggu hingga proses instalasi selesai dan success, tekan Next.
+8. Pada bagian Summary, tekan Completed.
+G. MENAMBAHKAN KOMPONEN TAMBAHAN DI STACK RAMESBI
+1. Buka konsol lalu akses ke host dimana ambari server di instal
+2. Jalankan command berikut : 
+       curl -sS -u rames:Bismillah24434 https://repo.rames.id/mpack/install.sh | sudo bash
+       
+       Lalu tekan enter, maka akan muncul tampilan seperti berikut.
+       
+       Gambar 41 MPack RAMES
+
+3. Pilih service yang akan ditambahkan ke ambari, dalam hal ini ditambahkan nifi, presto dan superset. Ketik '3 4 5' lalu tekan enter.
+4. Tentukan opsi install atau reinstall. Jika install baru maka pilih opsi install dengan ketik 1, lalu tekan enter. Step ini akan berulang sampai semua service berhasil ditambahkan.
+5. Tunggu sampai proses instalasi selesai.
+6. Ulangi step 4 sampai semua service berhasil ditambahkan.
+       
+H. INSTALASI KOMPONEN TAMBAHAN KE CLUSTER
+
+H.1 PRESTO
+1. Pada menu Services, tekan ... lalu pilih Add Service. Centang pada PRESTO lalu tekan Next.
+
+Gambar 42 Pemilihan service PRESTO
+
+2. Tentukan assignment node sesuai konfigurasi seperti yang ada pada gambar di bawah. Tekan Next.
+
+Gambar 43 PRESTO Node assignment
+
+3. Untuk PRESTO, dibutuhkan setting GROUP CONFIG untuk menambahkan Cordinator dan Worker. Cara menambahkannya sebagai berikut
+
+Gambar 44 PRESTO Manage Config Groups
+4. Lalu klik tanda + untuk menambahkan Worker
+
+Gambar 45 Membuat grup konfig PRESTO
+
+5. Assign Worker sesuai kebutuhan
+
+Gambar 46 Pemilihan host grup
+
+6. Untuk Cordinator tidak perlu ditambahkan, Karena yg ada di Group Default otomatis akan menjadi Cordinator
+
+Gambar 47 Pembagian konfig grup PRESTO
+
+7. Step selanjutnya perlu menambahkan Config untuk worker seperti pada gambar berikut
+
+Gambar 48 Konfigurasi grup
+
+8. Jika sudah sesuai tekan NEXT, dan akan muncul pop-up konfirmasi lalu tekan PROCEED ANYWAY
+
+Gambar 49 Pop up notifikasi
+9. Selanjutnya di step Review, tekan DEPLOY jika config sudah sesuai
+
+Gambar 50 Review service
+
+10. Tunggu sampai instalasi selesai.  Jika instalasi berhasil akan berubah menjadi seperti gambar berikut
+
+Gambar 51 Progress instalasi
+
+11. Pada bagian Summary, tekan Completed
+
+H.2 NIFI
+1. Pada menu Services, tekan ... lalu pilih Add Service. Centang pada NIFI lalu tekan Next.
+
+Gambar 52 Pemilihan service NIFI
+2. Tentukan assignment node sesuai konfigurasi seperti yang ada pada gambar di bawah. Tekan Next.
+
+Gambar 53 NIFI node assignment
+
+3. Setelah itu pada step Customize Service, set configure default, tekan NEXT
+
+Gambar 54 Konfigurasi default NIFI
+
+4. Lalu muncul pop-up confirmation, klik PROCEED ANYWAY
+
+Gambar 55 Pop up notifikasi
+
+5. Selanjutnya di step Review, tekan DEPLOY jika config sudah sesuai
+
+Gambar 56 Review service
+
+6. Setelah menekan DEPLOY pada step sebelumnya, akan muncul progress instalasi sebagai berikut
+
+Gambar 57 Progress instalasi NIFI
+
+7. Tunggu sampai instalasi selesai.  Jika instalasi berhasil akan berubah menjadi seperti gambar berikut
+
+Gambar 58 Instalasi NIFI
+
+
+H.3 SUPERSET
+1. Pada menu Services, tekan ... lalu pilih Add Service. Centang pada SUPERSET lalu tekan Next.
+
+Gambar 59 Pemilihan service SUPERSET
+
+2. Tentukan assignment node sesuai konfigurasi seperti yang ada pada gambar di bawah. Tekan Next.
+
+Gambar 60 SUPERSET node assignment
+
+3. Lalu pada step Add Service Wizard perlu disesuaikan untuk bagian SUPERSET SQLALCHEMY URI pada Advanced superset-env seperti gambar berikut
+
+Gambar 61 Konfigurasi lanjutan SUPERSET
+
+4. Lalu muncul pop-up confirmation, klik PROCEED ANYWAY
+
+Gambar 62 Pop up notifikasi
+
+5. Selanjutnya di step Review, tekan DEPLOY jika config sudah sesuai
+
+Gambar 63 Review service
+
+6. Setelah menekan DEPLOY pada step sebelumnya, akan muncul progress instalasi sebagai berikut. Tunggu sampai instalasi selesai.
+
+Gambar 64 Progress instalasi SUPERSET
+
+
+H.4 PHOENIX
+1. Untuk instalasi PHOENIX ada 2 cara, melalui mpack dan melalui config HBASE. Yang dipakai kali ini yaitu melalui config HBASE dengan meng-enable PHOENIX dibagian config HBASE
+
+Gambar 65 Konfigurasi Enable Phoenix di HBase
+
+2. Setelah config sesuai lalu tekan save, dan akan muncul pop-up confirmation lalu klik PROCEED ANYWAY.
+
+Gambar 66 Pop up notifikasi
+H.5 PROMETHEUS
+H.5.1 Installasi & Setup Prometheus
+
+1. Untuk instalasi dan setup prometheus, download terlebih dRAMESlu prometheus pada link berikut :
+	wget "https://github.com/prometheus/prometheus/releases/download/v2.51.2/prometheus-2.51.2.linux-amd64.tar.gz"
+
+
+
+
+	
+
+2. Move file prometheus ke folder /home/prometheus/
+
+# mv prometheus-2.51.2.linux-amd64.tar.gz /home/prometheus/
+
+  
+
+3. Extract file prometheus
+
+# tar -xvzf prometheus-2.51.2.linux-amd64.tar.gz 
+
+
+
+
+4. Untuk menyiapkan Prometheus sebagai layanan systemd, buat file unit systemd. File ini akan menjelaskan bagaimana layanan harus start, stop, dan manage. Berikut adalah langkah-langkah untuk setup systemd:
+- Buat file baru dengan folder dan file berikut: /etc/systemd/system/prometheus.service
+- Tambahkan konten berikut ke file:
+	
+# cat /etc/systemd/system/prometheus.service 
+[Unit]
+Description=Prometheus Server
+Documentation=https://prometheus.io/docs/introduction/overview/
+After=network-online.target
+[Service]
+User=root
+Restart=on-failure
+WorkingDirectory=/home/prometheus/prometheus-2.51.2.linux-amd64
+ExecStart=/home/prometheus/prometheus-2.51.2.linux-amd64/prometheus --config.file=/home/prometheus/prometheus-2.51.2.linux-amd64/prometheus.yml
+[Install]
+WantedBy=multi-user.target
+       
+       
+       
+5. Setelah membuat file unit, Anda perlu memuat ulang systemd untuk mengambil layanan baru, lalu enable dan start service prometheus. Lalu anda bisa mengecek status dari service prometheus.
+
+# systemctl daemon-reload
+# systemctl enable prometheus
+# systemctl start prometheus
+# systemctl status prometheus
+
+
+
+	
+6. Web UI prometheus dapat di akses pada link berikut:
+
+       http://rdl-prod-m02:9090/
+       
+Berikut sample tampilan web UI prometheus:
+       
+
+
+
+H.5.2 Setup Nifi Metrics Pada Prometheus
+1. Untuk membuat metrics nifi, terlebih dRAMESlu anda harus configure url dan port pada NIFI UI sebagai berikut:
+
+
+2. Pilih tab Reporting Tasks -> Add Reporting Task, lalu pilih dan add prometheusReportingTask
+	
+
+
+3. Edit Reporting task details dengan property dan value sebagai berikut:
+	
+
+
+4. Untuk config port nifi metrics, edit file berikut pada directory prometheus /home/prometheus/prometheus-2.51.2.linux-amd64/prometheus.yml. Edit file tersebut lalu tambahkan config pada akhir baris berikut:
+
+       - job_name: "nifi"
+    			# metrics_path defaults to '/metrics'
+  			# scheme defaults to 'http'.
+    			static_configs:
+     	 		- targets: ["rdl-prod-m01.rames.id:9094"]
+
+##Note: targets adalah link dari url dan port nifi yg di install di cluster tersebut.
+
+
+
+5. Lalu restart service prometheus dengan command berikut:
+
+# systemctl stop prometheus
+# systemctl start prometheus
+# systemctl status prometheus
+
+6. Jika sudah di restart service prometheus, lalu cek web UI prometheus dengan link berkut:
+       
+       http://rdl-prod-m02:9090/targets
+
+Berikut endpoint nifi metrics sudah termonitor dengan status UP.
+
+
+
+H.6 SETUP MONITORING NIFI WITH GRAFANA
+H.6.1 Konfigurasi Data Source Prometheus
+1. Untuk membuat data source prometheus anda harus login terlebuh dRAMESlu pada web UI Grafana dengan link berikut:
+
+       http://rdl-prod-m02.rames.id:3000/login
+
+Login dengan user/password : admin/admin
+
+
+
+
+2. Setelah login lalu klik Configuration -> Data sources, lalu add data source prometheus.
+	
+
+3. Configure Name dan URL prometheus pada kolom berikut, lalu klik save & test, setelah itu klik explore.
+
+
+
+
+
+H.6.2  Create PrometheusReportingTask Dashboard
+1. Untuk membuat dashboard klik Dashboards -> Import, lalu copy dan paste link dari website grafana berikut:
+
+https://grafana.com/grafana/dashboards/12314-nifi-prometheusreportingtask-dashboard/
+
+lalu klik Load.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2. Setelah itu isi Name dan pilih database prometheus = Prometheus-Nifi. lalu klik Import.
+
+
+3. Tampilan dashboard nifi-prometheusreportingtask.
+	
+
+
+H.7 SETUP ALERT & EMAIL DI AMBARI
+Untuk mengirim alert lewat email pada ambari UI ada beberapa config berikut:
+ 
+1. Login ke UI Ambari lalu klik menu Alerts pada menu disamping kiri. Setelah itu klik ACTIONS lalu klik Manage Notifications.
+
+
+2. Lalu tampil popup sebagai berikut, setelah itu klik tombol [+] untuk create new alert notification. 
+
+
+3. Tampil popup form sebagai berikut untuk create/edit Notification, config sesuai dengan Alert yang diinginkan, pada contoh di bawah akan dibuat alert untuk semua service group dan severity yang ada di ambari maka pilih Select All, lalu pilih method Email dan config credentials Email seperti Email To, SMTP Server, SMTP Port, Email Form, lalu centang Use authentication, setelah itu masukan username dan password email nya lalu centang Start TLS, lalu klik SAVE. Sebagai contoh pada gambar berikut:
+
+
+
+
+
+
+
+
+4. Alert Notifications sudah ter-create lalu klik CLOSE.
+
+
+
+
+
+H.8 TRINO
+1. Pada menu Services, tekan ... lalu pilih Add Service. Centang pada TRINO lalu tekan Next.
+
+
+2. Tentukan assignment node sesuai konfigurasi seperti yang ada pada gambar di bawah. Tekan Next.
+
+
+3. Untuk TRINO, dibutuhkan setting GROUP CONFIG untuk menambahkan Cordinator dan Worker. Cara menambahkannya sebagai berikut
+
+
+4. Lalu klik tanda + untuk menambahkan Worker
+
+
+
+
+
+
+5. Assign worker sesuai kebutuhan
+
+
+6. Untuk Cordinator tidak perlu ditambahkan, Karena yg ada di Group Default otomatis akan menjadi Cordinator
+7. Step selanjutnya perlu menambahkan Config untuk worker seperti pada gambar berikut
+
+
+8. Jika sudah sesuai tekan NEXT, dan akan muncul pop-up konfirmasi lalu tekan PROCEED ANYWAY
+
+
+
+
+9. Tunggu hingga proses install selesai, jika berhasil maka akan seperti gambar berikut
+
+
+H.9 ELASTICSEARCH
+
+H.10 RANGER
+1. Pada menu Services, tekan ... lalu pilih Add Service. Centang pada RANGER lalu tekan Next.
+2. Tentukan assignment node sesuai konfigurasi seperti yang ada pada gambar di bawah. Tekan Next.
+
+3. Step selanjutnya perlu menambahkan Config seperti pada gambar berikut
+
+4. Jika sudah sesuai tekan NEXT, dan akan muncul pop-up konfirmasi lalu tekan PROCEED ANYWAY
+5. Selanjutnya di step Review, tekan DEPLOY jika config sudah sesuai
+6. Tunggu hingga proses install selesai
+H.11 ATLAS
+1. Pada menu Services, tekan ... lalu pilih Add Service. Centang pada ATLAS lalu tekan Next.
+
+2. Tentukan assignment node sesuai konfigurasi seperti yang ada pada gambar di bawah. Tekan Next.
+3. Step selanjutnya perlu menambahkan Config seperti pada gambar berikut
+
+4. Jika sudah sesuai tekan NEXT, dan akan muncul pop-up konfirmasi lalu tekan PROCEED ANYWAY
+5. Selanjutnya di step Review, tekan DEPLOY jika config sudah sesuai
+6. Tunggu hingga proses install selesai
+
+
+H.12 KNOX
+
+
+
+H.13 GRIFFIN
+
+
+
+
+	
+
+
+
+
+
